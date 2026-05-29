@@ -3,15 +3,12 @@ const connectDb = require("./config/database");
 const User = require("./models/user")
 const app = express();
 
+app.use(express.json()) //middleware to convert req.body to javascript object
+
+// post user data to db
 app.post("/signup", async (req, res) => {
-    const userObj = {
-        firstName: "Keerthana",
-        lastName: "Mutharasu",
-        emailId: "kem@gmail.com",
-        password: "test#124"
-    }
     // Create an new instance of the User model
-    const user = new User(userObj)
+    const user = new User(req.body)
     try {
         await user.save();
         res.send("User Added successfully")
@@ -20,6 +17,39 @@ app.post("/signup", async (req, res) => {
         res.status(400).send("Error addding user")
     }
 })
+
+// get all users from db
+app.get("/feed", async (req, res) => {
+    const users = await User.find({})
+    try {
+        if (users.length === 0) {
+            res.status(404).send("No user found.")
+        }
+        else res.send(users)
+    }
+    catch (err) {
+        res.status(400).send("Something went wrong.")
+    }
+}
+)
+
+// get one user based on a value from db
+app.get("/user", async (req, res) => {
+    try {
+        // can also use find({ emailId: req.body.emailId }) - return array of users with same emailid
+        const user = await User.findOne({ emailId: req.body.emailId })
+        if (!user) {
+            res.status(404).send("No user found")
+        }
+        else {
+            res.send(user)
+        }
+    }
+    catch (err) {
+        res.status(400).send("Something went wrong")
+    }
+})
+
 
 connectDb().then(() => {
     console.log("DB connected")

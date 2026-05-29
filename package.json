@@ -12,10 +12,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev" : "node src/app.js",
-    "start": "nodemon src/app.js"
+    "dev": "node src/app.js",
+    "start": "nodemon src/requests.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.6.3"
   }
 }
