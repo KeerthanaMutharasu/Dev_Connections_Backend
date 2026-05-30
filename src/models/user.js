@@ -16,12 +16,12 @@ const userSchema = new mongoose.Schema({
     emailId: {
         type: String,
         required: true,
+        unique: true,   //two users should not have same email id
         validate(value) {
             if (!validator.isEmail(value)) {
                 throw new Error("Email is invalid.")
             }
         },
-        unique: true   //two users should not have same email id
     },
     password: {
         type: String,
@@ -62,7 +62,10 @@ const userSchema = new mongoose.Schema({
             message: "Cannot enter more than 10 skills"
         }
     }
-})
+},
+    {
+        timestamps: true
+    })
 
 // can also be implemented as below
 // module.exports = mongoose.model("User", userSchema);
