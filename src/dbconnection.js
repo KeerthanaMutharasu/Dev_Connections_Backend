@@ -14,7 +14,7 @@ app.post("/signup", async (req, res) => {
         res.send("User Added successfully")
     }
     catch (err) {
-        res.status(400).send("Error addding user")
+        res.status(400).send("Error addding user - " + err.message)
     }
 })
 
@@ -50,6 +50,35 @@ app.get("/user", async (req, res) => {
     }
 })
 
+// delete using findByIdAndDelete(id) - can also be findByIdAndDelete({_id: userId})
+app.delete("/user/:userId", async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.userId);
+        res.send("User deleted successfully")
+    }
+    catch (err) {
+        res.status(400).send("Something went worng.")
+    }
+})
+
+// update user data
+app.patch("/user/:userId", async (req, res) => {
+
+    try {
+        const ALLOWED_KEYS = ["firstName", "lastName", "age", "skills", "photoUrl"];
+        const isUpdateAllowed = Object.keys(req.body).every((k) => ALLOWED_KEYS.includes(k)
+        )
+        if (!isUpdateAllowed) throw new Error("Update not allowed for this field.")
+        await User.findByIdAndUpdate(req.params.userId, req.body, {
+            returnDocument: "after",
+            runValidators: true
+        });
+        res.send("User updated successfully")
+    }
+    catch (err) {
+        res.status(400).send("Something went wrong - " + err.message)
+    }
+})
 
 connectDb().then(() => {
     console.log("DB connected")
