@@ -86,76 +86,12 @@ connectionRequestRoute.post("/request/review/:status/:requestId", userAuth, asyn
 
 })
 
-connectionRequestRoute.get("/user/request/received", userAuth, async (req, res) => {
-    try {
-        const loggedInUser = req.user;
 
-        const userId = loggedInUser._id;
 
-        const data = await ConnectionRequestModel.find({
-            status: "interested",
-            toUserId: userId
-        }).populate("fromUserId", "firstName lastName skills")
 
-        if (!data) {
-            return res.json({
-                message: "No connection request"
-            })
-        }
 
-        res.json({
-            message: "Data fetched successfully",
-            data
-        })
 
-    }
-    catch (err) {
-        res.json({
-            message: err.message
-        })
-    }
-}
-)
 
-connectionRequestRoute.get("/user/connections", userAuth, async (req, res) => {
-
-    try {
-        const loggedInUser = req.user;
-
-        const userId = loggedInUser._id;
-
-        const data = await ConnectionRequestModel.find({
-            $or: [
-                {
-                    fromUserId: userId, status: "accepted",
-                }, {
-                    toUserId: userId, status: "accepted"
-                }
-            ]
-        }).populate("fromUserId", "firstName lastName skills").populate("fromUserId", "firstName lastName skills")
-
-        if (!data) {
-            return res.json({
-                message: "No connection request"
-            })
-        }
-
-        const fromUserData = data.map((row) => row.fromUserId._id.toString()
-            === loggedInUser._id.toString() ? row.toUserId : row.fromUserId
-        )
-
-        res.json({
-            message: "Data fetched successfully",
-            data: fromUserData
-        })
-    }
-    catch (err) {
-        res.json({
-            message: err.message
-        })
-    }
-
-})
 
 
 module.exports = { connectionRequestRoute }

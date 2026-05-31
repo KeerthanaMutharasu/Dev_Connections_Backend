@@ -28,7 +28,7 @@ authRoute.post("/signup", async (req, res) => {
         res.send("User Added successfully")
     }
     catch (err) {
-        res.status(400).send("Error addding user - " + err.message)
+        res.status(400).json({ message: err.message })
     }
 })
 
@@ -58,7 +58,7 @@ authRoute.post("/login", async (req, res) => {
 
     }
     catch (err) {
-        res.status(400).send("Error addding user - " + err.message)
+        res.status(400).json({ message: err.message })
     }
 
 })

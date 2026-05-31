@@ -2,7 +2,9 @@ const express = require("express");
 const { userAuth } = require("../auth")
 const { validateProfileUpdateRequest, validatePasswordRequest } = require("../utils/helper");
 const User = require("../models/user");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const ConnectionRequestModel = require("../models/connectionRequest");
+const { authRoute } = require("./authRoute");
 const profileRoute = express.Router();
 
 profileRoute.get("/profile/view", userAuth, async (req, res) => {
@@ -11,7 +13,7 @@ profileRoute.get("/profile/view", userAuth, async (req, res) => {
         res.send(user)
     }
     catch (err) {
-        res.status(400).send("Error addding user - " + err.message)
+        res.status(400).json({ message: err.message })
     }
 })
 
@@ -32,7 +34,7 @@ profileRoute.patch("/profile/update", userAuth, async (req, res) => {
         res.send(loggedinUser)
     }
     catch (err) {
-        res.status(400).send("Error addding user - " + err.message)
+        res.status(400).json({ message: err.message })
     }
 })
 
@@ -49,5 +51,6 @@ profileRoute.patch("/profile/update/password", userAuth, (req, res) => {
         data: req.user
     })
 })
+
 
 module.exports = { profileRoute }
