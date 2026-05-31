@@ -1,9 +1,7 @@
 const validator = require("validator");
 
-
-
-const validateRequestBody = (requesBody) => {
-    const { firstName, emailId, password } = requesBody;
+const validateRequestBody = (requestBody) => {
+    const { firstName, emailId, password } = requestBody;
 
     if (!firstName || !emailId || !password) {
         throw new Error("Missing fields.")

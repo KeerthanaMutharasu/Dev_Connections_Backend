@@ -4,8 +4,12 @@ const User = require("./models/user")
 const app = express();
 const validateRequestBody = require("./utils/helper")
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser")
+const { userAuth } = require("./auth")
 
 app.use(express.json()) //middleware to convert req.body to javascript object
+app.use(cookieParser()) // middlewarw to get the cookies from the request 
 
 // post user data to db
 app.post("/signup", async (req, res) => {
@@ -36,7 +40,7 @@ app.post("/signup", async (req, res) => {
 })
 
 // user login
-app.post("/user", async (req, res) => {
+app.post("/login", async (req, res) => {
     try {
         const { emailId, password } = req.body;
 
@@ -46,16 +50,34 @@ app.post("/user", async (req, res) => {
         if (!user) throw new Error("Invalid credentials");
 
         // check the password entered match which is in db[hashed password]
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        // used schema methods to offload the validate password
+        const isPasswordValid = await user.validatePassword(password)
+        if (isPasswordValid) {
+            // used schema methods to offload the sign jwt logic
+            const token = await user.getJwtToken();
 
-        if (!isPasswordMatch) throw new Error("Invalid credentials")
+            res.cookie("token", token, {
+                expires: new Date(Date.now() + 8 * 3600000)
+            })
+            res.send("Login sucessful.")
+        }
+        else throw new Error("Invalid credentials");
 
-        res.send("Login sucessful.")
     }
     catch (err) {
         res.status(400).send("Error addding user - " + err.message)
     }
 
+})
+
+app.get("/profile", userAuth, async (req, res) => {
+    try {
+        const user = req.user;
+        res.send(user)
+    }
+    catch (err) {
+        res.status(400).send("Error addding user - " + err.message)
+    }
 })
 
 // get all users from db
