@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
+const User = require("./user")
 
 const connectionRequestSchema = new mongoose.Schema({
     fromUserId: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
     },
     toUserId: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
     },
     status: {
@@ -39,6 +42,6 @@ connectionRequestSchema.pre("save", function () {
     }
 })
 
-const ConnectionRequestModel = mongoose.model("ConnectionRequestModel", connectionRequestSchema)
+const ConnectionRequestModel = mongoose.model("ConnectionRequest", connectionRequestSchema)
 
 module.exports = ConnectionRequestModel

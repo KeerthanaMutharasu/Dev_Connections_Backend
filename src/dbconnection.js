@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser")
 
 const { authRoute } = require("./routes/authRoute");
 const { profileRoute } = require("./routes/profileRoute");
-const { connectionRequestRoute } = require("./routes/connectionRequest");
+const { connectionRequestRoute } = require("./routes/connectionRequestRoute");
 
 app.use(express.json()) //middleware to convert req.body to javascript object
 app.use(cookieParser()) // middleware to get the cookies from the request 
