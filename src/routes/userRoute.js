@@ -85,6 +85,15 @@ userRoute.get("/feed", userAuth, async (req, res) => {
         const loggedInUser = req.user;
         const notallowedStatus = ["interested", "accepted", "rejected", "ignored"];
 
+        const page = parseInt(req.query.page) || 1;
+        let limit = parseInt(req.query.limit) || 10;
+
+
+        limit = limit > 50 ? 50 : limit;
+
+        // write logic to skip first 10 recorde or 20 if the input page is 1 or 2 respectively
+        const skip = (page - 1) * limit;
+
         const connectRequestUsers = await ConnectionRequestModel.find({
             $or: [{
                 fromUserId: loggedInUser._id
@@ -106,7 +115,7 @@ userRoute.get("/feed", userAuth, async (req, res) => {
             $and: [{ _id: { $nin: Array.from(hideRequestUsers) } },
             { _id: { $ne: loggedInUser._id } }
             ]
-        }).select(SELECTEDFIELDS)
+        }).select(SELECTEDFIELDS).skip(skip).limit(limit)
 
         if (!users.length) {
             return res.json({
