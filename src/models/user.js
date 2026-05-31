@@ -55,6 +55,9 @@ const userSchema = new mongoose.Schema({
         },
         default: "https://www.bing.com/images/search?view=detailV2&ccid=i50UjYMc&id=6A821661A9253FFFF135FF3C143F2BA7A7978F95&thid=OIP.i50UjYMcMwLKqutTKZmoqgHaHa&mediaurl=https%3a%2f%2fi.pinimg.com%2foriginals%2f0f%2f69%2f1c%2f0f691cd77a8c6d90f07b35c10c95668f.jpg&exph=4096&expw=4096&q=empty+man+dp&FORM=IRPRST&ck=0965C56E9AEF1A7014FDF0C8E7EEF62D&selectedIndex=2&itb=0"
     },
+    about: {
+        type: String
+    },
     skills: {
         type: [String],
         validate: {
