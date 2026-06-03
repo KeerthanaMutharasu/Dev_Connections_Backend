@@ -36,25 +36,23 @@ authRoute.post("/signup", async (req, res) => {
 authRoute.post("/login", async (req, res) => {
     try {
         const { emailId, password } = req.body;
-
         // check whether email id is present in DB
         const user = await User.findOne({ emailId: emailId });
-
-        if (!user) throw new Error("Invalid credentials");
-
+        if (!user) res.status(400).json({ message: "Invalid credentials" });
         // check the password entered match which is in db[hashed password]
         // used schema methods to offload the validate password
         const isPasswordValid = await user.validatePassword(password)
+
         if (isPasswordValid) {
             // used schema methods to offload the sign jwt logic
             const token = await user.getJwtToken();
 
             res.cookie("token", token, {
-                expires: new Date(Date.now() + 8 * 3600000)
+                expires: new Date(Date.now() + 1 * 3600000)
             })
-            res.send("Login sucessful.")
+            res.json({ message: "Login successful", data: user })
         }
-        else throw new Error("Invalid credentials");
+        else res.status(400).json({ message: "Invalid credentials" });
 
     }
     catch (err) {
@@ -69,6 +67,7 @@ authRoute.post("/logout", async (req, res) => {
     res.cookie("token", null), {
         expires: new Date(Date.now())
     }
+    res.clearCookie("token");
     res.send("Logout Succesful")
 })
 

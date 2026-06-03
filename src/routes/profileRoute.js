@@ -10,7 +10,10 @@ const profileRoute = express.Router();
 profileRoute.get("/profile/view", userAuth, async (req, res) => {
     try {
         const user = req.user;
-        res.send(user)
+        res.json({
+            messsage: "User profile fetched successfully.",
+            data: user
+        })
     }
     catch (err) {
         res.status(400).json({ message: err.message })
@@ -31,7 +34,10 @@ profileRoute.patch("/profile/update", userAuth, async (req, res) => {
         const loggedinUser = req.user;
         const updatedUser = Object.keys(req.body).forEach(field => (loggedinUser[field] = req.body[field]))
         await loggedinUser.save();
-        res.send(loggedinUser)
+        res.json({
+            message: "Profile updated successfully.",
+            data: loggedinUser
+        })
     }
     catch (err) {
         res.status(400).json({ message: err.message })

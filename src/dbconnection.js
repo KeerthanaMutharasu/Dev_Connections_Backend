@@ -9,9 +9,14 @@ const { authRoute } = require("./routes/authRoute");
 const { profileRoute } = require("./routes/profileRoute");
 const { connectionRequestRoute } = require("./routes/connectionRequestRoute");
 const { userRoute } = require("./routes/userRoute");
+const cors = require("cors");
 
 app.use(express.json()) //middleware to convert req.body to javascript object
 app.use(cookieParser()) // middleware to get the cookies from the request 
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
 
 app.use("/", authRoute)   //if no route matched it will go to profile route
 app.use("/", profileRoute)

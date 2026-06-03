@@ -17,7 +17,7 @@ userRoute.get("/user/request/received", userAuth, async (req, res) => {
         const data = await ConnectionRequestModel.find({
             status: "interested",
             toUserId: userId
-        }).populate("fromUserId", "firstName lastName skills")
+        }).populate("fromUserId", "firstName lastName skills photoUrl age gender")
 
         if (!data) {
             return res.json({
@@ -54,7 +54,8 @@ userRoute.get("/user/connections", userAuth, async (req, res) => {
                     toUserId: userId, status: "accepted"
                 }
             ]
-        }).populate("fromUserId", "firstName lastName skills").populate("fromUserId", "firstName lastName skills")
+        }).populate("fromUserId", "firstName lastName skills photoUrl about age gender").
+            populate("toUserId.", "firstName lastName skills photoUrl about age gender")
 
         if (!data) {
             return res.json({

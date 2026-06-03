@@ -73,7 +73,8 @@ connectionRequestRoute.post("/request/review/:status/:requestId", userAuth, asyn
         data.status = status;
         await data.save()
         res.json({
-            message: "Connected request is " + status + "ed"
+            message: "Connected request is " + status + "ed",
+            data
         })
 
     }
