@@ -11,7 +11,7 @@ authRoute.post("/signup", async (req, res) => {
         // validate the req body - create a helper function
         validateRequestBody(req.body);
 
-        const { firstName, lastName, emailId, password } = req.body;
+        const { firstName, lastName, emailId, password, about, age, gender } = req.body;
 
         // encrypt password using bcrypt library
         const passwordHash = await bcrypt.hash(password, 10)
@@ -23,9 +23,16 @@ authRoute.post("/signup", async (req, res) => {
             emailId,
             password: passwordHash
         })
+        const token = await user.getJwtToken();
 
+        res.cookie("token", token, {
+            expires: new Date(Date.now() + 1 * 3600000)
+        })
         await user.save();
-        res.send("User Added successfully")
+        res.json({
+            message: "User Added successfully",
+            data: user
+        })
     }
     catch (err) {
         res.status(400).json({ message: err.message })
