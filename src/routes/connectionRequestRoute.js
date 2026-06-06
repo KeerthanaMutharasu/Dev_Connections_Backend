@@ -5,6 +5,7 @@ const connectionRequestRoute = express.Router();
 const ConnectionRequestModel = require("../models/connectionRequest")
 const { userAuth } = require("../auth");
 const User = require("../models/user");
+const sendEmail = require("../utils/sendEmail")
 
 connectionRequestRoute.post("/request/send/:status/:toUserId", userAuth, async (req, res, next) => {
     try {
@@ -36,8 +37,13 @@ connectionRequestRoute.post("/request/send/:status/:toUserId", userAuth, async (
             fromUserId, toUserId, status
         })
 
-        await userData.save()
 
+        await userData.save();
+
+        const emailRes = await sendEmail.run(`New Connection request`,
+            `You have got a new connection request from ${req.user.firstName}`
+        )
+        console.log(emailRes)
         res.json({
             message: "Connection request sent.",
             data: userData
