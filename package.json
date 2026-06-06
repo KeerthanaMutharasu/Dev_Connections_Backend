@@ -12,8 +12,8 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/app.js",
-    "start": "nodemon src/requests.js"
+    "dev": "nodemon src/dbconnection.js",
+    "start": "nodemon src/dbconnection.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
