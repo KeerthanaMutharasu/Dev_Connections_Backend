@@ -13,7 +13,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/dbconnection.js",
-    "start": "nodemon src/dbconnection.js"
+    "start": "node src/dbconnection.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
