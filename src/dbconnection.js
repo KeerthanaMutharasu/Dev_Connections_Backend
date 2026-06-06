@@ -1,9 +1,13 @@
+require("dotenv").config();
+
+
 const express = require("express");
 const connectDb = require("./config/database");
 const User = require("./models/user")
 const app = express();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser")
+
 
 const { authRoute } = require("./routes/authRoute");
 const { profileRoute } = require("./routes/profileRoute");
