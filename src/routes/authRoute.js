@@ -21,7 +21,10 @@ authRoute.post("/signup", async (req, res) => {
             firstName,
             lastName,
             emailId,
-            password: passwordHash
+            password: passwordHash,
+            about: req.body.about ?? "This is a default about section of the user",
+            photoUrl: req.body.photoUrl ?? "https://i.pinimg.com/236x/3c/bd/86/3cbd86e0fab831190029fee0ea5bb882.jpg?nii=t"
+
         })
         const token = await user.getJwtToken();
 
